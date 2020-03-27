@@ -8,7 +8,7 @@ fixing bugs and adding new features if requested.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'graphql-pundit', '~> 0.7.0'
+gem 'graphql-pundit', github: 'lubosch/graphql-pundit'
 ```
 
 And then execute:
@@ -16,15 +16,6 @@ And then execute:
 ```bash
 $ bundle
 ```
-
-### Upgrade Notice
-
-If you're upgrading from an earlier version, make sure to delete your
-`bootsnap` cache, to avoid a load error (see
-[this issue](https://github.com/ontohub/graphql-pundit/issues/51)).
-The cache files are usually located in the `tmp` directory in your
-repository and are named `bootsnap-compile-cache` and
-`bootsnap-load-path-cache`.
 
 ## Usage
 
