@@ -15,12 +15,25 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  config.fuubar_progress_bar_options = {format: '[%B] %c/%C',
-                                        progress_mark: '#',
-                                        remainder_mark: '-'}
+  config.fuubar_progress_bar_options = { format: '[%B] %c/%C',
+                                         progress_mark: '#',
+                                         remainder_mark: '-' }
 end
 
 Field = GraphQL::Pundit::Field
+module GraphQL
+  module Pundit
+    class Field
+      def resolve_field(obj, args, ctx)
+        if @resolve_proc
+          @resolve_proc.call(obj, args, ctx)
+        else
+          obj.send(name.to_sym)
+        end
+      end
+    end
+  end
+end
 
 class CarDataset
   attr_reader :cars
@@ -78,32 +91,33 @@ class Car
     @country = country
   end
 
-  CARS = [{name: 'Toyota', country: 'Japan'},
-          {name: 'Volkswagen Group', country: 'Germany'},
-          {name: 'Hyundai', country: 'South Korea'},
-          {name: 'General Motors', country: 'USA'},
-          {name: 'Ford', country: 'USA'},
-          {name: 'Nissan', country: 'Japan'},
-          {name: 'Honda', country: 'Japan'},
-          {name: 'Fiat Chrysler', country: 'Italy'},
-          {name: 'Renault', country: 'France'},
-          {name: 'Groupe PSA', country: 'France'},
-          {name: 'Suzuki', country: 'Japan'},
-          {name: 'SAIC', country: 'China'},
-          {name: 'Daimler', country: 'Germany'},
-          {name: 'BMW', country: 'Germany'},
-          {name: 'Changan', country: 'China'},
-          {name: 'Mazda', country: 'Japan'},
-          {name: 'BAIC', country: 'China'},
-          {name: 'Dongfeng Motor', country: 'China'},
-          {name: 'Geely', country: 'China'},
-          {name: 'Great Wall', country: 'China'}].
+  CARS = [{ name: 'Toyota', country: 'Japan' },
+          { name: 'Volkswagen Group', country: 'Germany' },
+          { name: 'Hyundai', country: 'South Korea' },
+          { name: 'General Motors', country: 'USA' },
+          { name: 'Ford', country: 'USA' },
+          { name: 'Nissan', country: 'Japan' },
+          { name: 'Honda', country: 'Japan' },
+          { name: 'Fiat Chrysler', country: 'Italy' },
+          { name: 'Renault', country: 'France' },
+          { name: 'Groupe PSA', country: 'France' },
+          { name: 'Suzuki', country: 'Japan' },
+          { name: 'SAIC', country: 'China' },
+          { name: 'Daimler', country: 'Germany' },
+          { name: 'BMW', country: 'Germany' },
+          { name: 'Changan', country: 'China' },
+          { name: 'Mazda', country: 'Japan' },
+          { name: 'BAIC', country: 'China' },
+          { name: 'Dongfeng Motor', country: 'China' },
+          { name: 'Geely', country: 'China' },
+          { name: 'Great Wall', country: 'China' }].
     map { |c| Car.new(c[:name], c[:country]) }
 end
 
 class CarPolicy
   class Scope
     attr_reader :scope
+
     def initialize(_user, scope)
       @scope = scope
     end

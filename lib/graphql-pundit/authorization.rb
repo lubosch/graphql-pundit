@@ -38,6 +38,7 @@ module GraphQL
 
       def resolve_field(obj, args, ctx)
         raise ::Pundit::NotAuthorizedError unless do_authorize(obj, args, ctx)
+
         super(obj, args, ctx)
       rescue ::Pundit::NotAuthorizedError
         if @do_raise

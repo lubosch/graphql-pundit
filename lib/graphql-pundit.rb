@@ -20,12 +20,12 @@ module GraphQL
 
     def call(defn, *args, policy: nil, record: nil)
       query = args[0] || defn.name
-      opts = {record: record,
-              query: query,
-              policy: policy,
-              raise: raise_unauthorized}
+      opts = { record: record,
+               query: query,
+               policy: policy,
+               raise: raise_unauthorized }
       if query.respond_to?(:call)
-        opts = {proc: query, raise: raise_unauthorized}
+        opts = { proc: query, raise: raise_unauthorized }
       end
       Define::InstanceDefinable::AssignMetadataKey.new(:authorize).
         call(defn, opts)
@@ -40,7 +40,7 @@ module GraphQL
     end
 
     def call(defn, proc = :infer_scope)
-      opts = {proc: proc, deprecated: @deprecated}
+      opts = { proc: proc, deprecated: @deprecated }
       Define::InstanceDefinable::AssignMetadataKey.
         new(:"#{@before_or_after}_scope").
         call(defn, opts)

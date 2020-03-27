@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/ontohub/graphql-pundit.svg?branch=master)](https://travis-ci.org/ontohub/graphql-pundit)
+[![Coverage Status](https://codecov.io/gh/ontohub/graphql-pundit/branch/master/graph/badge.svg)](https://codecov.io/gh/ontohub/graphql-pundit)
+
 # GraphQL::Pundit
 
 Original repository has been archived so I am continuing working on it,
