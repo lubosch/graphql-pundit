@@ -26,9 +26,6 @@ AllCops:
 Layout/ParameterAlignment:
   Enabled: false
 
-Layout/DotPosition:
-  EnforcedStyle: trailing
-
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 

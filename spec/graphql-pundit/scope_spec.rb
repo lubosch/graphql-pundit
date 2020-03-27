@@ -5,11 +5,12 @@ require 'spec_helper'
 RSpec.shared_examples 'before_scope' do |with_authorization|
   if with_authorization
     it 'returns nil' do
-      expect(result).to eq(nil)
+      expect(result['data']['cars']).to be_nil
     end
   else
     it 'calls the scope' do
-      expect(result).to match_array(expected_result)
+      expect(result['data']['cars'].map { |car| car['name'] })
+        .to match_array(expected_result)
     end
   end
 end
@@ -17,11 +18,12 @@ end
 RSpec.shared_examples 'after_scope' do |with_authorization|
   if with_authorization
     it 'returns nil' do
-      expect(result).to eq(nil)
+      expect(result['data']['cars']).to be_nil
     end
   else
     it 'calls the scope' do
-      expect(result).to match_array(expected_result)
+      expect(result['data']['cars'].map { |car| car['name'] })
+        .to match_array(expected_result)
     end
   end
 end
@@ -30,7 +32,6 @@ RSpec.shared_examples 'authorizing scopes' do |with_authorization|
   let(:authorize) { true } if with_authorization
 
   context 'before_scope' do
-    let(:resolve) { ->(cars, _, _) { cars.to_a.map(&:name) } }
     context 'inferred scope' do
       let(:before_scope) { true }
       let(:expected_result) do
@@ -59,19 +60,17 @@ RSpec.shared_examples 'authorizing scopes' do |with_authorization|
   end
 
   context 'after_scope' do
-    let(:resolve) { ->(scope, _, _) { scope.where { |c| c.name.length > 5 } } }
-
     context 'inferred scope' do
       let(:scope_class) do
         Class.new(CarPolicy::Scope) do
           def resolve
-            scope.where { |c| c.country == 'Germany' }.to_a.map(&:name)
+            scope.where { |c| c.country == 'Germany' }.to_a
           end
         end
       end
       let(:after_scope) { true }
       let(:expected_result) do
-        ['Volkswagen Group', 'Daimler']
+        ['Volkswagen Group', 'Daimler', 'BMW']
       end
 
       before do
@@ -84,11 +83,11 @@ RSpec.shared_examples 'authorizing scopes' do |with_authorization|
     context 'explicit scope' do
       let(:after_scope) do
         lambda do |scope, _, _|
-          scope.where { |c| c.country == 'Japan' }.to_a.map(&:name)
+          scope.where { |c| c.country == 'Japan' }.to_a
         end
       end
       let(:expected_result) do
-        %w(Nissan Suzuki Toyota)
+        %w(Nissan Suzuki Toyota Honda Mazda)
       end
       include_examples 'after_scope', with_authorization
     end
@@ -97,14 +96,14 @@ RSpec.shared_examples 'authorizing scopes' do |with_authorization|
       let(:scope_class) do
         Class.new(CarPolicy::Scope) do
           def resolve
-            scope.where { |c| c.country == 'China' }.to_a.map(&:name)
+            scope.where { |c| c.country == 'China' }.to_a
           end
         end
       end
 
       let(:after_scope) { ChineseCarPolicy }
       let(:expected_result) do
-        ['Changan', 'Dongfeng Motor', 'Great Wall']
+        ['BAIC', 'Geely', 'SAIC', 'Changan', 'Dongfeng Motor', 'Great Wall']
       end
 
       before do
@@ -120,17 +119,22 @@ RSpec.describe GraphQL::Pundit::Scope do
   let(:before_scope) { nil }
   let(:after_scope) { nil }
   let(:authorize) { nil }
-  let(:result) { field.resolve(Car, {}, {}) }
+  let(:result) { schema.execute('{ cars { name } }') }
+  let(:schema) do
+    TestSchema::Query.add_field(field)
+    TestSchema
+  end
+
   context 'one-line field definition' do
     let(:field) do
-      Field.new(name: :name,
-                type: [String],
-                authorize: authorize,
-                before_scope: before_scope,
-                after_scope: after_scope,
-                null: true,
-                resolve: resolve).
-        to_graphql
+      TestSchema::BaseField.from_options(name: :cars,
+                                         type: [TestSchema::Car],
+                                         authorize: authorize,
+                                         policy: CarPolicy,
+                                         record: Car,
+                                         before_scope: before_scope,
+                                         after_scope: after_scope,
+                                         null: true)
     end
 
     context 'with failing authorization' do
@@ -143,14 +147,15 @@ RSpec.describe GraphQL::Pundit::Scope do
 
   context 'block field definition' do
     let(:field) do
-      field = Field.new(name: :name,
-                        type: [String],
-                        authorize: authorize,
-                        null: true,
-                        resolve: resolve)
+      field = TestSchema::BaseField.from_options(name: :cars,
+                                                 type: [TestSchema::Car],
+                                                 authorize: authorize,
+                                                 policy: CarPolicy,
+                                                 record: Car,
+                                                 null: true)
       field.before_scope before_scope
       field.after_scope after_scope
-      field.to_graphql
+      field
     end
 
     context 'with failing authorization' do

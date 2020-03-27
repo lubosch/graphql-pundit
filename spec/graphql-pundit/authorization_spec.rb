@@ -16,7 +16,7 @@ RSpec.shared_examples 'auth field' do |do_raise|
     let(:auth_result) { true }
 
     it 'returns the field value' do
-      expect(result).to eq(field_value)
+      expect(result['data']['car']['name']).to eq(field_value)
     end
   end
 
@@ -25,11 +25,12 @@ RSpec.shared_examples 'auth field' do |do_raise|
 
     if do_raise
       it 'throws an error' do
-        expect { result }.to raise_error(GraphQL::ExecutionError)
+        expect(result['errors'][0]['message'])
+          .to eq("You're not authorized to do this")
       end
     else
       it 'returns nil' do
-        expect(result).to eq(nil)
+        expect(result['data']['car']['name']).to be_nil
       end
     end
   end
@@ -94,18 +95,23 @@ RSpec.describe GraphQL::Pundit::Authorization do
   let(:record) { nil }
   let(:policy) { nil }
   let(:field_value) { Car.first.name }
-  let(:result) { field.resolve(Car.first, {}, {}) }
+  let(:result) { schema.execute('{ car { name } }') }
+  let(:schema) do
+    TestSchema::Car.add_field(field)
+    TestSchema
+  end
 
   context 'one-line field definition' do
     let(:field) do
-      Field.new(name: :name,
-                type: String,
-                authorize!: (do_raise ? query : nil),
-                authorize: (do_raise ? nil : query),
-                record: record,
-                policy: policy,
-                null: true).
-        to_graphql
+      TestSchema::BaseField.new(
+        name: :name,
+        type: String,
+        authorize!: (do_raise ? query : nil),
+        authorize: (do_raise ? nil : query),
+        record: record,
+        policy: policy,
+        null: true
+      )
     end
 
     include_examples 'auth methods'
@@ -113,15 +119,15 @@ RSpec.describe GraphQL::Pundit::Authorization do
 
   context 'block field definition' do
     let(:field) do
-      field = Field.new(name: :name,
-                        type: String,
-                        null: true)
+      field = TestSchema::BaseField.new(name: :name,
+                                        type: String,
+                                        null: true)
       if do_raise
         field.authorize! query, record: record, policy: policy
       else
         field.authorize query, record: record, policy: policy
       end
-      field.to_graphql
+      field
     end
 
     include_examples 'auth methods'

@@ -15,24 +15,50 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
+  config.before(:each) do
+    TestSchema::Car.add_field(
+      TestSchema::BaseField.from_options(
+        name: :name,
+        type: String,
+        null: false
+      )
+    )
+  end
+
   config.fuubar_progress_bar_options = { format: '[%B] %c/%C',
                                          progress_mark: '#',
                                          remainder_mark: '-' }
 end
 
-Field = GraphQL::Pundit::Field
-module GraphQL
-  module Pundit
-    class Field
-      def resolve_field(obj, args, ctx)
-        if @resolve_proc
-          @resolve_proc.call(obj, args, ctx)
-        else
-          obj.send(name.to_sym)
-        end
-      end
+class TestSchema < GraphQL::Schema
+  class BaseField < GraphQL::Schema::Field
+    prepend GraphQL::Pundit::Scope
+    prepend GraphQL::Pundit::Authorization
+  end
+
+  class Car < GraphQL::Schema::Object
+    field :country, String, null: false
+  end
+
+  class Query < GraphQL::Schema::Object
+    field_class BaseField
+
+    field :car, Car, null: true
+
+    def car
+      ::Car.first
+    end
+
+    field :cars, [Car], null: true
+
+    def cars
+      ::Car
     end
   end
+
+  use GraphQL::Execution::Interpreter
+  use GraphQL::Analysis::AST
+  query(Query)
 end
 
 class CarDataset
@@ -110,8 +136,8 @@ class Car
           { name: 'BAIC', country: 'China' },
           { name: 'Dongfeng Motor', country: 'China' },
           { name: 'Geely', country: 'China' },
-          { name: 'Great Wall', country: 'China' }].
-    map { |c| Car.new(c[:name], c[:country]) }
+          { name: 'Great Wall', country: 'China' }]
+    .map { |c| Car.new(c[:name], c[:country]) }
 end
 
 class CarPolicy
@@ -129,6 +155,10 @@ class CarPolicy
 
   def initialize(_user, car)
     @car = car
+  end
+
+  def cars?
+    false
   end
 
   def name?

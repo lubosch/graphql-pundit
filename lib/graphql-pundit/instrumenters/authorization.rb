@@ -35,8 +35,8 @@ module GraphQL
               options[:proc].call(root, arguments, context)
             else
               record = record(root, arguments, context)
-              ::Pundit::PolicyFinder.new(policy(record)).policy!.
-                new(context[current_user], record).public_send(query)
+              ::Pundit::PolicyFinder.new(policy(record)).policy!
+                .new(context[current_user], record).public_send(query)
             end
           end
 

@@ -20,6 +20,18 @@ And then execute:
 $ bundle
 ```
 
+## Upgrading notes
+
+# If you r coming from ontobot
+
+Add this to your schema definition:
+
+```
+  use GraphQL::Execution::Interpreter
+  use GraphQL::Analysis::AST
+```
+It should work also without this but it's not covered by tests.
+
 ## Usage
 
 ### Class based API (`graphql-ruby >= 1.8`)

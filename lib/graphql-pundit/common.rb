@@ -25,6 +25,10 @@ module GraphQL
       def model?(thing)
         thing.respond_to?(:model)
       end
+
+      def object?(thing)
+        thing.respond_to?(:object)
+      end
     end
   end
 end

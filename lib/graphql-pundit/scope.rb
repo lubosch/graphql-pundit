@@ -10,13 +10,20 @@ module GraphQL
         base.include(GraphQL::Pundit::Common)
       end
 
-      def initialize(*args, before_scope: nil,
-                            after_scope: nil,
-                            **kwargs, &block)
+      # rubocop:disable Metrics/ParameterLists
+      def initialize(*args, policy: nil,
+                     record: nil,
+                     before_scope: nil,
+                     after_scope: nil,
+                     **kwargs, &block)
         @before_scope = before_scope
         @after_scope = after_scope
+        @policy = policy
+        @record = record
         super(*args, **kwargs, &block)
       end
+
+      # rubocop:enable Metrics/ParameterLists
 
       def before_scope(scope = true)
         @before_scope = scope
@@ -26,20 +33,26 @@ module GraphQL
         @after_scope = scope
       end
 
-      def resolve_field(obj, args, ctx)
+      def resolve(obj, args, ctx)
         before_scope_return = apply_scope(@before_scope, obj, args, ctx)
         field_return = super(before_scope_return, args, ctx)
         apply_scope(@after_scope, field_return, args, ctx)
       end
 
+      alias resolve_field resolve
+
       private
 
       def apply_scope(scope, root, arguments, context)
         return root unless scope
-        return scope.call(root, arguments, context) if scope.respond_to?(:call)
 
-        scope = infer_scope(root) if scope.equal?(true)
-        scope::Scope.new(context[self.class.current_user], root).resolve
+        record = @record || root
+        if scope.respond_to?(:call)
+          return scope.call(record, arguments, context)
+        end
+
+        scope = infer_scope(record) if scope.equal?(true)
+        scope::Scope.new(context[self.class.current_user], record).resolve
       end
 
       def infer_scope(root)

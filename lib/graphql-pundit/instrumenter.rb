@@ -25,8 +25,8 @@ module GraphQL
 
       def instrument(type, field)
         before_scoped_field = before_scope_instrumenter.instrument(type, field)
-        after_scoped_field = after_scope_instrumenter.
-          instrument(type, before_scoped_field)
+        after_scoped_field = after_scope_instrumenter
+          .instrument(type, before_scoped_field)
         authorization_instrumenter.instrument(type, after_scoped_field)
       end
     end

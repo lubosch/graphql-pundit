@@ -12,9 +12,9 @@ module GraphQL
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(*args, authorize: nil,
-                            record: nil,
-                            policy: nil,
-                            **kwargs, &block)
+                     record: nil,
+                     policy: nil,
+                     **kwargs, &block)
         # rubocop:enable Metrics/ParameterLists
         # authorize! is not a valid variable name
         authorize_bang = kwargs.delete(:authorize!)
@@ -22,7 +22,7 @@ module GraphQL
         @policy = policy if policy
         @authorize = authorize_bang || authorize
         @do_raise = !!authorize_bang
-        super(*args, **kwargs, &block)
+        super(*args, policy: policy, record: record, **kwargs, &block)
       end
 
       def authorize(*args, record: nil, policy: nil)
@@ -36,7 +36,7 @@ module GraphQL
         authorize(*args, record: record, policy: policy)
       end
 
-      def resolve_field(obj, args, ctx)
+      def resolve(obj, args, ctx)
         raise ::Pundit::NotAuthorizedError unless do_authorize(obj, args, ctx)
 
         super(obj, args, ctx)
@@ -45,6 +45,8 @@ module GraphQL
           raise GraphQL::ExecutionError, "You're not authorized to do this"
         end
       end
+
+      alias resolve_field resolve
 
       private
 
@@ -82,6 +84,7 @@ module GraphQL
           policy.call(record, arguments, context)
         elsif policy.equal?(nil)
           infer_from = model?(record) ? record.model : record
+          infer_from = object?(record) ? record.object : infer_from
           ::Pundit::PolicyFinder.new(infer_from).policy!
         else
           policy
