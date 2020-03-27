@@ -1,10 +1,7 @@
-[![Gem](https://img.shields.io/gem/v/graphql-pundit.svg)](https://rubygems.org/gems/graphql-pundit)
-[![Build Status](https://travis-ci.org/ontohub/graphql-pundit.svg?branch=master)](https://travis-ci.org/ontohub/graphql-pundit)
-[![Coverage Status](https://codecov.io/gh/ontohub/graphql-pundit/branch/master/graph/badge.svg)](https://codecov.io/gh/ontohub/graphql-pundit)
-[![Code Climate](https://codeclimate.com/github/ontohub/graphql-pundit/badges/gpa.svg)](https://codeclimate.com/github/ontohub/graphql-pundit)
-[![GitHub issues](https://img.shields.io/github/issues/ontohub/graphql-pundit.svg?maxAge=2592000)](https://waffle.io/ontohub/ontohub-backend?source=ontohub%2Fgraphql-pundit)
-
 # GraphQL::Pundit
+
+Original repository has been archived so I am continuing working on it,
+fixing bugs and adding new features if requested.
 
 ## Installation
 
@@ -234,7 +231,7 @@ field :display_name, ..., authorize: :name,
 
 # UserPolicy#display_name? initialized with user.account_data
 field :display_name, ..., do
-  authorize policy: UserPolicy, 
+  authorize policy: UserPolicy,
             record: ->(obj, args, ctx) { obj.account_data }
 end
 ```
@@ -256,7 +253,7 @@ MySchema = GraphQL::Schema.define do
 end
 ```
 
-By default, `ctx[:current_user]` will be used as the user to authorize. To change that behavior, pass a symbol to `GraphQL::Pundit::Instrumenter`. 
+By default, `ctx[:current_user]` will be used as the user to authorize. To change that behavior, pass a symbol to `GraphQL::Pundit::Instrumenter`.
 
 ```ruby
 GraphQL::Pundit::Instrumenter.new(:me) # will use ctx[:me]
