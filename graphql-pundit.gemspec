@@ -23,17 +23,17 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'graphql', '>= 1.6.4', '< 1.11.0'
-  spec.add_dependency 'pundit', '~> 2.0.0'
+  spec.add_dependency 'pundit', '~> 2.1.0'
 
   spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'codecov', '~> 0.1.10'
-  spec.add_development_dependency 'fuubar', '~> 2.3.0'
-  spec.add_development_dependency 'pry', '~> 0.11.0'
-  spec.add_development_dependency 'pry-byebug', '~> 3.6.0'
-  spec.add_development_dependency 'pry-rescue', '~> 1.4.4'
+  spec.add_development_dependency 'fuubar', '~> 2.5.0'
+  spec.add_development_dependency 'pry', '~> 0.13.1'
+  spec.add_development_dependency 'pry-byebug', '~> 3.9.0'
+  spec.add_development_dependency 'pry-rescue', '~> 1.5.0'
   spec.add_development_dependency 'pry-stack_explorer', '~> 0.4.9.2'
-  spec.add_development_dependency 'rake', '~> 12.0'
+  spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'rspec', '~> 3.6'
-  spec.add_development_dependency 'rubocop', '~> 0.79.0'
-  spec.add_development_dependency 'simplecov', '~> 0.16.1'
+  spec.add_development_dependency 'rubocop', '~> 0.83.0'
+  spec.add_development_dependency 'simplecov', '~> 0.18.5'
 end
