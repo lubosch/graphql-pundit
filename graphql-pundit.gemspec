@@ -7,8 +7,8 @@ require 'graphql-pundit/version'
 Gem::Specification.new do |spec|
   spec.name          = 'graphql-pundit'
   spec.version       = GraphQL::Pundit::VERSION
-  spec.authors       = ['Ontohub Core Developers']
-  spec.email         = ['ontohub-dev-l@ovgu.de']
+  spec.authors       = ['Lubomir Vnenk']
+  spec.email         = ['lubomir.vnenk@zoho.com']
 
   spec.summary       = 'Pundit authorization support for graphql'
   spec.description   = spec.summary
@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'graphql', '>= 1.6.4', '< 1.11.0'
-  spec.add_dependency 'pundit', '~> 1.1.0'
+  spec.add_dependency 'pundit', '~> 2.0.0'
 
   spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'codecov', '~> 0.1.10'
