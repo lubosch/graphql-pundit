@@ -1,5 +1,6 @@
 AllCops:
-  TargetRailsVersion: 6.0
+  TargetRubyVersion: 2.7
+  NewCops: enable
 
   CacheRootDirectory: /tmp
   AllowSymlinksInCacheRootDirectory: true
@@ -40,7 +41,7 @@ Metrics/BlockLength:
     - 'db/migrate/*'
     - '*.gemspec'
 
-Metrics/LineLength:
+Layout/LineLength:
   Exclude:
     - 'app/graphql/**/*_enum.rb'
     - 'config/initializers/devise.rb'

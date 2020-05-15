@@ -10,6 +10,7 @@ module GraphQL
         # This does the actual Pundit authorization
         class AuthorizationResolver
           attr_reader :current_user, :old_resolver, :options
+
           def initialize(current_user, old_resolver, options)
             @current_user = current_user
             @old_resolver = old_resolver
