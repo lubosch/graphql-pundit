@@ -16,9 +16,7 @@ module GraphQL
             @old_resolver = old_resolver
             @field = field
 
-            unless valid_value?(scope)
-              raise ArgumentError, 'Invalid value passed to `scope`'
-            end
+            raise ArgumentError, 'Invalid value passed to `scope`' unless valid_value?(scope)
 
             @scope = scope
           end

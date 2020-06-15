@@ -18,15 +18,11 @@ module GraphQL
           end
 
           def call(root, arguments, context)
-            unless authorize(root, arguments, context)
-              raise ::Pundit::NotAuthorizedError
-            end
+            raise ::Pundit::NotAuthorizedError unless authorize(root, arguments, context)
 
             old_resolver.call(root, arguments, context)
           rescue ::Pundit::NotAuthorizedError
-            if options[:raise]
-              raise GraphQL::ExecutionError, "You're not authorized to do this"
-            end
+            raise GraphQL::ExecutionError, "You're not authorized to do this" if options[:raise]
           end
 
           private

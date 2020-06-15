@@ -47,9 +47,7 @@ module GraphQL
         return root unless scope
 
         record = @record || root
-        if scope.respond_to?(:call)
-          return scope.call(record, arguments, context)
-        end
+        return scope.call(record, arguments, context) if scope.respond_to?(:call)
 
         scope = infer_scope(record) if scope.equal?(true)
         scope::Scope.new(context[self.class.current_user], record).resolve

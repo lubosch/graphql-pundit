@@ -24,9 +24,7 @@ module GraphQL
                query: query,
                policy: policy,
                raise: raise_unauthorized }
-      if query.respond_to?(:call)
-        opts = { proc: query, raise: raise_unauthorized }
-      end
+      opts = { proc: query, raise: raise_unauthorized } if query.respond_to?(:call)
       Define::InstanceDefinable::AssignMetadataKey.new(:authorize)
         .call(defn, opts)
     end
