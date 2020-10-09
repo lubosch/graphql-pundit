@@ -62,7 +62,7 @@ module GraphQL
       def infer_query(auth_value)
         # authorize can be callable, true (for inference) or a policy query
         query = auth_value.equal?(true) ? method_sym : auth_value
-        query.to_s + '?'
+        "#{query}?"
       end
 
       def infer_record(record, root, arguments, context)

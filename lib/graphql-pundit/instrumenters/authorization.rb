@@ -38,7 +38,7 @@ module GraphQL
           end
 
           def query
-            @query ||= options[:query].to_s + '?'
+            @query ||= "#{options[:query]}?"
           end
 
           def policy(record)
