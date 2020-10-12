@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/github/lubosch/graphql-pundit.svg?branch=master)](https://travis-ci.com/github/lubosch/graphql-pundit)
+[![Build Status](https://travis-ci.com/lubosch/graphql-pundit.svg?branch=master)](https://travis-ci.com/lubosch/graphql-pundit)
 [![Coverage Status](https://codecov.io/gh/lubosch/graphql-pundit/branch/master/graph/badge.svg)](https://codecov.io/gh/lubosch/graphql-pundit)
 
 # GraphQL::Pundit
