@@ -14,8 +14,9 @@ Gem::Specification.new do |spec|
   spec.description   = spec.summary
   spec.homepage      = 'https://github.com/ontohub/graphql-pundit'
   spec.license       = 'MIT'
+  spec.required_ruby_version = Gem::Requirement.new('>= 2.4.0')
 
-  spec.files         = `git ls-files -z`.split("\x0").reject do |f|
+  spec.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
   end
   spec.bindir        = 'exe'

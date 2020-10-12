@@ -1,5 +1,5 @@
 AllCops:
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 2.4
   NewCops: enable
 
   CacheRootDirectory: /tmp
@@ -56,14 +56,15 @@ Naming/FileName:
     - lib/ontohub-models.rb
     - spec/lib/git-shell_spec.rb
 
+Style/OptionalBooleanParameter:
+  Enabled: false
+
 Naming/MethodParameterName:
   Exclude:
     - 'spec/**/*'
 
 Style/Documentation:
-  Exclude:
-    - 'app/indexers/**/*'
-    - 'spec/**/*'
+  Enabled: false
 
 Style/DoubleNegation:
   Enabled: false
