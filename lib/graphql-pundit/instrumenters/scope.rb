@@ -33,9 +33,7 @@ module GraphQL
           end
 
           def find_scope(root, scope)
-            if !inferred?(scope)
-              scope::Scope
-            else
+            if inferred?(scope)
               # Special case for Sequel datasets that do not respond to
               # ActiveModel's model_name
               infer_from = if root.respond_to?(:model)
@@ -44,6 +42,8 @@ module GraphQL
                              root
                            end
               ::Pundit::PolicyFinder.new(infer_from).scope!
+            else
+              scope::Scope
             end
           end
 
