@@ -3,7 +3,7 @@
 require_relative 'support/simplecov'
 
 require 'bundler/setup'
-require 'graphql-pundit'
+require 'graphql-pundit2'
 require 'fuubar'
 require 'pry'
 

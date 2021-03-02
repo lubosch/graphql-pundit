@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.9.1
+Fix gem files
+
 ## 0.9
 Bump graphql version
 
