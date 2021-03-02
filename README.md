@@ -11,7 +11,7 @@ fixing bugs and adding new features if requested.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'graphql-pundit', github: 'lubosch/graphql-pundit'
+gem 'graphql-pundit2'
 ```
 
 And then execute:
@@ -22,7 +22,7 @@ $ bundle
 
 ## Upgrading notes
 
-# If you r coming from ontobot
+# If you are coming from ontobot
 
 Add this to your schema definition:
 
@@ -30,7 +30,6 @@ Add this to your schema definition:
   use GraphQL::Execution::Interpreter
   use GraphQL::Analysis::AST
 ```
-It should work also without this but it's not covered by tests.
 
 ## Usage
 
@@ -360,7 +359,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/ontohub/graphql-pundit.
+Bug reports and pull requests are welcome on GitHub at https://github.com/lubosch/graphql-pundit.
 
 
 ## License
